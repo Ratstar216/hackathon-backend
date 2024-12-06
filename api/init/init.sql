@@ -1,0 +1,8 @@
+CREATE TABLE user (
+    id char(26) NOT NULL PRIMARY KEY,
+    name varchar(50) NOT NULL,
+    age int(3) NOT NULL
+);
+
+INSERT INTO user VALUES ('00000000000000000000000001', 'hanako', 20);
+INSERT INTO user VALUES ('00000000000000000000000002', 'taro', 30);

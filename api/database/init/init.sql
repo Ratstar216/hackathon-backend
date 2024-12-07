@@ -6,3 +6,11 @@ CREATE TABLE user (
 
 INSERT INTO user VALUES ('00000000000000000000000001', 'hanako', 20);
 INSERT INTO user VALUES ('00000000000000000000000002', 'taro', 30);
+
+CREATE TABLE tweets (
+    id char(26) NOT NULL PRIMARY KEY,
+    name varchar(50) NOT NULL,
+    likes int(5) NOT NULL,
+    retweet int(4) NOT NULL,
+    content varchar(300) NOT NULL
+);

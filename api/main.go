@@ -13,7 +13,6 @@ import (
 	"github.com/oklog/ulid/v2"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
 type UserResForHTTPGet struct {
@@ -33,10 +32,10 @@ var db *sql.DB
 func init() {
 	// ①-1
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("fail: godotenv.Load, %v\n", err)
-	}
+	// err := godotenv.Load(".env")
+	//if err != nil {
+	//	log.Fatalf("fail: godotenv.Load, %v\n", err)
+	//}
 
 	mysqlUser := os.Getenv("MYSQL_USER")
 	mysqlPwd := os.Getenv("MYSQL_PASSWORD")

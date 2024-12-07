@@ -252,7 +252,7 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//id := ulid.Make().String()
-		log.Printf("%v, %v, %v, %v, %v", requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
+		log.Printf("%v, %v, %v, %v, %v", requestBody.Id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
 		_, err = ins.Exec(requestBody.Id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
 
 		if err != nil {

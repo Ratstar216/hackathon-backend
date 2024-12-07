@@ -242,7 +242,9 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("fail: db.Begin, %v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-		ins, err := tx.Prepare("INSERT INTO user VALUES (?, ?, ?, ?, ?)")
+
+		ins, err := tx.Prepare("INSERT INTO tweets VALUES (?, ?, ?, ?, ?)")
+		log.Printf("111111111111111")
 		if err != nil {
 			tx.Rollback()
 			log.Printf("fail: tx.Prepare, %v\n", err)
@@ -250,7 +252,9 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//id := ulid.Make().String()
+		log.Printf("%v, %v, %v, %v, %v", requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
 		_, err = ins.Exec(requestBody.Id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
+
 		if err != nil {
 			tx.Rollback()
 			log.Printf("fail: ins.Exec, %v\n", err)

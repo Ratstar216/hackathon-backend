@@ -4,14 +4,14 @@ services:
   hackathon:
     container_name: hackathon
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: ../Dockerfile
     platform: linux/x86_64
     tty: true
     ports:
-      - 8080:8080
+      - 3306:3306
     env_file:
-      - ./.env
+      - ../.env
     volumes:
       - type: volume
         source: hackathon

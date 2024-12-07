@@ -45,6 +45,7 @@ func init() {
 	// fmt.Println(mysqlUser, mysqlPwd, mysqlDatabase)
 
 	connStr := fmt.Sprintf("%s:%s@%s/%s", mysqlUser, mysqlPwd, mysqlHost, mysqlDatabase)
+	// fmt.Println(connStr)
 	_db, err := sql.Open("mysql", connStr)
 
 	// ①-2

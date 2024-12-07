@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  hack:
-    container_name: hack
+  hackathon:
+    container_name: hackathon
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,12 +14,12 @@ services:
       - ./.env
     volumes:
       - type: volume
-        source: hack
+        source: hackathon
         target: /var/lib/mysql
       - type: bind
         source: ./init
         target: /docker-entrypoint-initdb.d
 
 volumes:
-  hack:
-    name: hack
+  hackathon:
+    name: hackathon

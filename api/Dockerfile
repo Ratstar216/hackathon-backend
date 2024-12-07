@@ -1,10 +1,10 @@
 # 参考 https://note.com/jtamas_engineer/n/n28cc15e61a1f
 
-FROM golang:1.21.0 AS builder
+FROM golang:1.23.0 AS builder
 
 WORKDIR /app
 
-COPY ./main.go ./
+COPY . .
 
 RUN CGO_ENABLED=0 go build -o main /app/main.go
 

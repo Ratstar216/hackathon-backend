@@ -7,9 +7,11 @@ CREATE TABLE user (
 INSERT INTO user VALUES ('00000000000000000000000001', 'hanako', 20);
 INSERT INTO user VALUES ('00000000000000000000000002', 'taro', 30);
 
-CREATE TABLE tweets (
+CREATE TABLE posts (
     id char(26) NOT NULL PRIMARY KEY,
+    userid varchar(50) NOT NULL,
     name varchar(50) NOT NULL,
+    times varchar(50) NOT NULL,
     likes int(5) NOT NULL,
     retweet int(4) NOT NULL,
     content varchar(300) NOT NULL

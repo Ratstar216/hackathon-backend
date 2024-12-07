@@ -27,22 +27,24 @@ type RequestBody struct {
 }
 
 type TweetGet struct {
-	Id      string `json:"id"`
-	Userid  string `json:"userid"`
-	Name    string `json:"name"`
-	Times   string `json:"times"`
-	Likes   int    `json:"likes"`
-	Retweet int    `json:"retweet"`
-	Content string `json:"content"`
+	Id       string `json:"id"`
+	Userid   string `json:"userid"`
+	Name     string `json:"name"`
+	Times    string `json:"times"`
+	Likes    int    `json:"likes"`
+	Retweet  int    `json:"retweet"`
+	Content  string `json:"content"`
+	Reply_to string `json:"reply_to"`
 }
 
 type TweetPost struct {
-	Userid  string `json:"userid"`
-	Name    string `json:"name"`
-	Times   string `json:"times"`
-	Likes   int    `json:"likes"`
-	Retweet int    `json:"retweet"`
-	Content string `json:"content"`
+	Userid   string `json:"userid"`
+	Name     string `json:"name"`
+	Times    string `json:"times"`
+	Likes    int    `json:"likes"`
+	Retweet  int    `json:"retweet"`
+	Content  string `json:"content"`
+	Reply_to string `json:"reply_to"`
 }
 
 type CL struct {
@@ -201,7 +203,7 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 		// }
 
 		// ②-2
-		rows, err := db.Query("SELECT id, userid, name, times, likes, retweet, content FROM posts")
+		rows, err := db.Query("SELECT id, userid, name, times, likes, retweet, content, reply_to FROM posts")
 		if err != nil {
 			log.Printf("fail: db.Query, %v\n", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -212,7 +214,7 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 		tweets := make([]TweetGet, 0)
 		for rows.Next() {
 			var u TweetGet
-			if err := rows.Scan(&u.Id, &u.Userid, &u.Name, &u.Times, &u.Likes, &u.Retweet, &u.Content); err != nil {
+			if err := rows.Scan(&u.Id, &u.Userid, &u.Name, &u.Times, &u.Likes, &u.Retweet, &u.Content, &u.Reply_to); err != nil {
 				log.Printf("fail: rows.Scan, %v\n", err)
 
 				if err := rows.Close(); err != nil { // 500を返して終了するが、その前にrowsのClose処理が必要
@@ -251,7 +253,7 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 
-		ins, err := tx.Prepare("INSERT INTO posts VALUES (?, ?, ?, ?, ?, ?, ?)")
+		ins, err := tx.Prepare("INSERT INTO posts VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
 		log.Printf("111111111111111")
 		if err != nil {
 			tx.Rollback()
@@ -260,8 +262,8 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		id := ulid.Make().String()
-		log.Printf("%v, %v, %v, %v, %v, %v, %v", id, requestBody.Userid, requestBody.Name, requestBody.Times, requestBody.Likes, requestBody.Retweet, requestBody.Content)
-		_, err = ins.Exec(id, requestBody.Userid, requestBody.Name, requestBody.Times, requestBody.Likes, requestBody.Retweet, requestBody.Content)
+		log.Printf("%v, %v, %v, %v, %v, %v, %v, %v", id, requestBody.Userid, requestBody.Name, requestBody.Times, requestBody.Likes, requestBody.Retweet, requestBody.Content, requestBody.Reply_to)
+		_, err = ins.Exec(id, requestBody.Userid, requestBody.Name, requestBody.Times, requestBody.Likes, requestBody.Retweet, requestBody.Content, requestBody.Reply_to)
 
 		if err != nil {
 			tx.Rollback()

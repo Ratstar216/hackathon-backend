@@ -14,5 +14,6 @@ CREATE TABLE posts (
     times varchar(50) NOT NULL,
     likes int(5) NOT NULL,
     retweet int(4) NOT NULL,
-    content varchar(300) NOT NULL
+    content varchar(300) NOT NULL,
+    reply_to char(26)
 );

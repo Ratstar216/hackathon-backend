@@ -246,7 +246,7 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 
-		ins, err := tx.Prepare("INSERT INTO tweets VALUES (?, ?, ?, ?, ?, ?, ?)")
+		ins, err := tx.Prepare("INSERT INTO posts VALUES (?, ?, ?, ?, ?, ?, ?)")
 		log.Printf("111111111111111")
 		if err != nil {
 			tx.Rollback()

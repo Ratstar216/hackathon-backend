@@ -251,9 +251,9 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		//id := ulid.Make().String()
-		log.Printf("%v, %v, %v, %v, %v", requestBody.Id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
-		_, err = ins.Exec(requestBody.Id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
+		id := ulid.Make().String()
+		log.Printf("%v, %v, %v, %v, %v", id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
+		_, err = ins.Exec(id, requestBody.Name, requestBody.Likes, requestBody.Retweet, requestBody.Content)
 
 		if err != nil {
 			tx.Rollback()
@@ -269,9 +269,9 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// fmt.Printf("{ \"id\" : \"%s\" }", id)
-		// response := map[string]interface{}{"id": id}
+		response := map[string]interface{}{"id": id}
 		w.Header().Set("Content-Type", "application/json")
-		// json.NewEncoder(w).Encode(response)
+		json.NewEncoder(w).Encode(response)
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
 		return

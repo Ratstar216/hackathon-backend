@@ -45,6 +45,11 @@ type TweetPost struct {
 	Content string `json:"content"`
 }
 
+type CL struct {
+	Id     string `json:"id"`
+	Userid string `json:"userid"`
+}
+
 // ① GoプログラムからMySQLへ接続
 var db *sql.DB
 
@@ -285,6 +290,64 @@ func tweethandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func likehandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	switch r.Method {
+	case http.MethodPost:
+		var requestBody CL
+		err := json.NewDecoder(r.Body).Decode(&requestBody)
+		if err != nil {
+			log.Printf("fail: json.NewDecoder, %v\n", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		tx, err := db.Begin()
+		if err != nil {
+			log.Printf("fail: db.Begin, %v\n", err)
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
+		ins, err := tx.Prepare("UPDATE posts SET likes = likes + 1 WHERE id = (?)")
+		log.Printf("111111111111111")
+		if err != nil {
+			tx.Rollback()
+			log.Printf("fail: tx.Prepare, %v\n", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		// id := ulid.Make().String()
+		log.Printf("%v, %v", requestBody.Id, requestBody.Userid)
+		_, err = ins.Exec(requestBody.Id)
+
+		if err != nil {
+			tx.Rollback()
+			log.Printf("fail: ins.Exec, %v\n", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if err := tx.Commit(); err != nil {
+			tx.Rollback()
+			log.Printf("fail: tx.Commit, %v\n", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		// fmt.Printf("{ \"id\" : \"%s\" }", id)
+		//response := map[string]interface{}{"id": id}
+		//w.Header().Set("Content-Type", "application/json")
+		//json.NewEncoder(w).Encode(response)
+	case http.MethodOptions:
+		w.WriteHeader(http.StatusOK)
+		return
+	default:
+		log.Printf("fail: HTTP Method is %s\n", r.Method)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+}
+
 func main() {
 	// ② /userでリクエストされたらnameパラメーターと一致する名前を持つレコードをJSON形式で返す
 	http.HandleFunc("/user", handler)
@@ -292,6 +355,8 @@ func main() {
 	http.HandleFunc("/tweet", tweethandler)
 
 	http.HandleFunc("/posts", tweethandler)
+
+	http.HandleFunc("/likes", likehandler)
 
 	// ③ Ctrl+CでHTTPサーバー停止時にDBをクローズする
 	closeDBWithSysCall()

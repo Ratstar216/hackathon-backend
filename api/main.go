@@ -39,7 +39,7 @@ func init() {
 	}
 
 	mysqlUser := os.Getenv("MYSQL_USER")
-	mysqlPwd := os.Getenv("MYSQL_PWD")
+	mysqlPwd := os.Getenv("MYSQL_PASSWORD")
 	mysqlDatabase := os.Getenv("MYSQL_DATABASE")
 	mysqlHost := os.Getenv("MYSQL_HOST")
 	// fmt.Println(mysqlUser, mysqlPwd, mysqlDatabase)
